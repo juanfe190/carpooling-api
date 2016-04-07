@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Prueba</title>
+	<script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+	<script>
+	  var socket = io('http://localhost:3000');
+	  
+
+	socket.on('err', function(data){console.error(data)});
+	function eliminar(){
+		socket.emit('deleteRide', document.getElementById('id').value);
+	}
+	function joinear(){
+		var id = document.getElementById('id').value
+		socket.emit('joinRide', {email: 'meunire@hotmail.com', rideId: id});
+	}
+	function create(){
+				socket.emit('createRide', {
+		    "from": {
+		        "province": 5,
+		        "canton": "San Francisco"
+		    },
+		    "to": {
+		        "province": "San Jose",
+		        "canton": "San Jose"
+		    },
+		    "departureTime": "6:00 pm",
+		    "seatsAvailable": 5,
+		    "owner": "juanfe190@hotmail.com",
+		});
+	};
+
+	
+	</script>
+</head>
+
+<body>
+<button onclick="create()">Crear</button><br><br>
+<input type="text" id="id"></input>
+<button onclick="eliminar()">Eliminar</button>
+<button onclick="joinear()">Unirse</button><br><br>
+</body>
+</html>
