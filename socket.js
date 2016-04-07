@@ -7,6 +7,8 @@ module.exports = {
 var activeUsers=[];
 function startConnection(io){
 	io.on('connection', function(socket){
+		//Acciones globales
+		socket.on('getRides', getRides.bind(null, io));
 		socket.on('createRide', createRide.bind(null, socket));
 		socket.on('deleteRide', deleteRide.bind(null, socket));
 		socket.on('joinRide', joinRide.bind(null, socket));
@@ -26,7 +28,8 @@ function createRide(socket, data){
 		if(err) return socket.emit('err', {msg: err});
 
 		var user = rideObj.owner;
-		socket["email"] = user.email;
+		socket["email"] = user.email; //Agrega email al socket
+		socket.join(rideObj._id); //Crea room, el nombre sera el 'id' del ride
 		activeUsers.push({
 			email: user.email,
 			socket: socket,
@@ -61,7 +64,8 @@ function deleteRide(socket, id){
 function joinRide(socket, data){
 	RidesController.addJoinedUsers({email: data.email, rideId: data.rideId}, function(err){
 		if(err) return socket.emit('err', {msg: err});
-		socket["email"] = data.email;
+		socket["email"] = data.email; //Agrega email al socket
+		socket.join(data.rideId); //Ingresa al room con el 'id' del ride
 		activeUsers.push({
 			email: data.email,
 			socket: socket,
@@ -69,6 +73,19 @@ function joinRide(socket, data){
 			type: 'user'
 		});
 
+	});
+}
+
+/**
+* Enviar rides a todos los clientes
+*
+* @param global io
+*/
+function getRides(io){
+	RidesController.all(function(err, ridesObj){
+		if(err) return socket.emit('err', {msg: err});
+
+		io.emit('updateClientRides', ridesObj);
 	});
 }
 

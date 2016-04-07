@@ -3,8 +3,22 @@ var usersModel = require('../Database/Users').usersModel;
 module.exports={
 	store,
 	destroy,
-	addJoinedUsers
+	addJoinedUsers,
+	all
 };
+
+/**
+* Devuelve todos los rides de la BD
+*
+* @param Function callback
+*/
+function all(callback){
+	ridesModel.find({}, function(err, ridesObj){
+		if(err) return callback(err, null);
+
+		return callback(null, ridesObj);
+	});
+}
 
 /**
 * Crea un nuevo ride en BD

@@ -7,7 +7,7 @@
 	  var socket = io('http://localhost:3000');
 	  
 
-	socket.on('err', function(data){console.error(data)});
+	socket.emit('getRides');
 	function eliminar(){
 		socket.emit('deleteRide', document.getElementById('id').value);
 	}
@@ -31,12 +31,14 @@
 		});
 	};
 
-	
+	//**Listeners**//
+	socket.on('err', function(data){console.error(data)});
+	socket.on('updateClientRides', function(data){console.log(data)});
 	</script>
 </head>
 
 <body>
-<button onclick="create()">Crear</button><br><br>
+<button onclick="create()">Crear ride</button><br><br>
 <input type="text" id="id"></input>
 <button onclick="eliminar()">Eliminar</button>
 <button onclick="joinear()">Unirse</button><br><br>
