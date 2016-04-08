@@ -12,8 +12,9 @@
 		socket.emit('deleteRide', document.getElementById('id').value);
 	}
 	function joinear(){
-		var id = document.getElementById('id').value
-		socket.emit('joinRide', {email: 'meunire@hotmail.com', rideId: id});
+		var id = document.getElementById('id').value;
+		var email = document.getElementById('email').value;
+		socket.emit('joinRide', {email: email, rideId: id});
 	}
 	function create(){
 				socket.emit('createRide', {
@@ -31,16 +32,32 @@
 		});
 	};
 
+	function printRides(data){
+		var div = document.getElementById("rides");
+		div.innerHTML="";
+		data.forEach(function(element, key){
+			console.log(element);
+			div.innerHTML = "<li>Ride id: "+element._id+"</li>";
+			element.joinedUsers.forEach(function(user, key){
+				div.innerHTML = div.innerHTML + "<li>JoinedUser: "+user.email+"</li>"
+			});
+		});
+		
+	}
 	//**Listeners**//
 	socket.on('err', function(data){console.error(data)});
-	socket.on('updateClientRides', function(data){console.log(data)});
+	socket.on('updateClientRides', function(data){printRides(data)});
 	</script>
 </head>
 
 <body>
 <button onclick="create()">Crear ride</button><br><br>
-<input type="text" id="id"></input>
+ID: <input type="text" id="id"></input><br>
+EMAIL: <input type="text" id="email">
 <button onclick="eliminar()">Eliminar</button>
 <button onclick="joinear()">Unirse</button><br><br>
+<div>
+	<ul id="rides"></ul>
+</div>
 </body>
 </html>

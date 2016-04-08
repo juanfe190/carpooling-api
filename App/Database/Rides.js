@@ -16,7 +16,8 @@ var ridesSchema = new Schema({
       date: 'date',
       seatsAvailable: 'number',
       owner: usersSchema,
-      joinedUsers: [usersSchema]
+      joinedUsers: [usersSchema],
+      waze: 'string'
 });
 
 var ridesModel = mongoose.model('Rides', ridesSchema);

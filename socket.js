@@ -5,10 +5,12 @@ module.exports = {
 };
 
 var activeUsers=[];
+var globalio;
 function startConnection(io){
+	globalio = io;
 	io.on('connection', function(socket){
 		//Acciones globales
-		socket.on('getRides', getRides.bind(null, io));
+		socket.on('getRides', sendRidesToClient);
 		socket.on('createRide', createRide.bind(null, socket));
 		socket.on('deleteRide', deleteRide.bind(null, socket));
 		socket.on('joinRide', joinRide.bind(null, socket));
@@ -36,6 +38,8 @@ function createRide(socket, data){
 			rideId: rideObj._id,
 			type: 'owner'
 		});
+
+		sendRidesToClient();
 	});
 }
 
@@ -52,6 +56,8 @@ function deleteRide(socket, id){
 		activeUsers =  activeUsers.filter(function(ride, index){
 			ride.rideId != id;
 		});
+
+		sendRidesToClient();
 	});
 }
 
@@ -73,6 +79,7 @@ function joinRide(socket, data){
 			type: 'user'
 		});
 
+		sendRidesToClient();
 	});
 }
 
@@ -81,11 +88,11 @@ function joinRide(socket, data){
 *
 * @param global io
 */
-function getRides(io){
+function sendRidesToClient(){
 	RidesController.all(function(err, ridesObj){
 		if(err) return socket.emit('err', {msg: err});
 
-		io.emit('updateClientRides', ridesObj);
+		globalio.emit('updateClientRides', ridesObj);
 	});
 }
 
