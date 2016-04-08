@@ -16,7 +16,8 @@ var constants = require('./App/Util/constants');
 //SOCKET.IO IMPLEMENTATION
 var io = require('socket.io').listen(server);
 io.set('origins', 'https://gentle-temple-29130.herokuapp.com');
-
+io.set('transports', ['xhr-polling']);
+io.set('polling duration', 10);
 var port = process.env.PORT || 3000;
 server.listen(port, function(){console.log('App running on port: '+port)});
 require('./socket').startConnection(io);
