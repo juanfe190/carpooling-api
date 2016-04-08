@@ -42,17 +42,17 @@ app.post('/usuario/registrar',
 	 UsersController.store);
 
 app.get('/usuario/:id', 
-	jwtMiddleware({secret: constants.jwtPrivateKey}),
+	//jwtMiddleware({secret: constants.jwtPrivateKey}),
 	UsersMiddlewares.checkIfExists,
 	UsersController.find);
 
 app.put('/usuario/actualizar/:id', 
-	jwtMiddleware({secret: constants.jwtPrivateKey}),
+	//jwtMiddleware({secret: constants.jwtPrivateKey}),
 	UsersMiddlewares.checkIfExists,
 	UsersController.update);
 
 app.delete('/usuario/eliminar',
-	jwtMiddleware({secret: constants.jwtPrivateKey}),
+	//jwtMiddleware({secret: constants.jwtPrivateKey}),
 	UsersMiddlewares.checkIfExists, 
 	UsersController.destroy);
 
