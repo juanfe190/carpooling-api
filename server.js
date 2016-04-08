@@ -15,6 +15,7 @@ var constants = require('./App/Util/constants');
 
 //SOCKET.IO IMPLEMENTATION
 var io = require('socket.io').listen(server);
+io.set('origins', 'https://gentle-temple-29130.herokuapp.com');
 server.listen(3000);
 require('./socket').startConnection(io);
 
