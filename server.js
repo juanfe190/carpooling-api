@@ -14,13 +14,13 @@ var jwtMiddleware = require('express-jwt');
 var constants = require('./App/Util/constants');
 
 //SOCKET.IO IMPLEMENTATION
-var io = require('socket.io').listen(8000);
-io.set('origins', '*');
+var io = require('socket.io').listen(server);
+//io.set('origins', '*');
 
 var ipaddress = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
-var port = process.env.OPENSHIFT_NODEJS_PORT || 8080;
+var port = process.env.OPENSHIFT_NODEJS_PORT || 3000;
 
-server.listen(port, ipaddress, function(){console.log('App running on port: '+port)});
+server.listen(port, function(){console.log('App running on port: '+port)});
 
 require('./socket').startConnection(io);
 
