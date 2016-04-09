@@ -14,7 +14,7 @@ var jwtMiddleware = require('express-jwt');
 var constants = require('./App/Util/constants');
 
 //SOCKET.IO IMPLEMENTATION
-var io = require('socket.io').listen(server);
+var io = require('socket.io').listen(8000);
 io.set('origins', '*');
 
 var port = process.env.PORT || 80;
