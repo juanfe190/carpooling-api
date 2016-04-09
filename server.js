@@ -17,8 +17,10 @@ var constants = require('./App/Util/constants');
 var io = require('socket.io').listen(8000);
 io.set('origins', '*');
 
-var port = process.env.PORT || 80;
-server.listen(port, function(){console.log('App running on port: '+port)});
+var ipaddress = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
+var port = process.env.OPENSHIFT_NODEJS_PORT || 8080;
+server.listen(port, ipaddress, function(){console.log('App running on port: '+port)});
+
 require('./socket').startConnection(io);
 
 //MONGOOSE CONNECTION
