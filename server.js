@@ -14,7 +14,7 @@ var jwtMiddleware = require('express-jwt');
 var constants = require('./App/Util/constants');
 
 //SOCKET.IO IMPLEMENTATION
-var io = require('socket.io').listen(8000);
+var io = require('socket.io').listen(server);
 io.set('origins', '*');
 
 var ipaddress = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
