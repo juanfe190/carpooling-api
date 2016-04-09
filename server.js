@@ -17,7 +17,7 @@ var constants = require('./App/Util/constants');
 var io = require('socket.io').listen(server);
 io.set('origins', '*');
 
-var port = process.env.PORT || 3000;
+var port = process.env.PORT || 80;
 server.listen(port, function(){console.log('App running on port: '+port)});
 require('./socket').startConnection(io);
 
