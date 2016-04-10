@@ -1,7 +1,8 @@
 var usersModel = require('../Database/Users').usersModel;
 module.exports = {
 	checkIfExists,
-	checkIfEmailExists
+	checkIfEmailExists,
+	checkRequiredValues
 };
 
 /**
@@ -20,6 +21,10 @@ function checkIfExists(request, response, next){
 	});
 }
 
+/**
+* Revisa que el usuario a tratar exista
+* @param String email (En body o en URL)
+*/
 function checkIfEmailExists(request, response, next){
 	var email = request.params.email || request.body.email;
 	if(!email) return response.json({error: 'El email del usuario no fue encontrado en el request'});
@@ -29,5 +34,17 @@ function checkIfEmailExists(request, response, next){
 		if(count>0) return next();
 
 		return response.json({error: 'El email especificado no existe'});
+	});
+}
+
+/**
+* Revisa que los atributos requeridos existan en el request
+*
+*/
+function checkRequiredValues(request, response, next){
+	var data = request.body;
+	var requiredFields = ['password', 'email'];
+	requiredFields.forEach(function(value, index){
+		if(typeof data[value] === 'undefined' || data[value]) return response.json({error: 'El atributo '+value+' es requerido'});
 	});
 }
