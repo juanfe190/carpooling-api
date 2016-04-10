@@ -52,5 +52,6 @@ function checkRequiredValues(request, response, next){
 
 	}).then(function(isEmpyOrNull){
 		if(isEmpyOrNull) return reponse.json({error: 'El atributo '+isEmpyOrNull.value+' es requerido'});
+		else return next();
 	}).done();
 }
