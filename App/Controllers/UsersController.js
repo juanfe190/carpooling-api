@@ -41,10 +41,10 @@ function store(request, response){
 	user.save(function(err, userObj){
 		if(err) return response.json({error: err});
 		
-		usersModel.findOne(userObj).populate('_study').exec(function(err, userObj2){
+		usersModel.findOne(userObj).populate('_study').exec(function(err, userObj){
 			if(err) return response.json({error: err});
 
-			return response.json(userObj2);
+			return response.json(userObj);
 		});
 	});
 }
