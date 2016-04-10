@@ -41,7 +41,7 @@ function store(request, response){
 	user.save(function(err, userObj){
 		if(err) return response.json({error: err});
 		
-		usersModel.findOne(userObj.study).populate('_study').exec(function(err, userObj2){
+		usersModel.findOne(userObj).populate('_study').exec(function(err, userObj2){
 			if(err) return response.json({error: err});
 
 			return response.json(userObj2);
