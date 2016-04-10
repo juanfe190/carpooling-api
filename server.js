@@ -57,7 +57,7 @@ app.post('/login',
 
 //USERS
 app.post('/usuario/registrar',
-	//UsersMiddlewares.checkRequiredValues,
+	UsersMiddlewares.checkRequiredValues,
 	 UsersController.store);
 
 app.get('/usuario/:id', 

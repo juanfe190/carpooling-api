@@ -1,5 +1,4 @@
 var usersModel = require('../Database/Users').usersModel;
-var Q = require('q');
 module.exports = {
 	checkIfExists,
 	checkIfEmailExists,
@@ -45,14 +44,9 @@ function checkIfEmailExists(request, response, next){
 function checkRequiredValues(request, response, next){
 	var data = request.body;
 	var requiredFields = ['password', 'email'];
-	Q.fcall(
-		requiredFields.forEach(function(value, index){
-			if(typeof data[value] === 'undefined' || !data[value]) return {invalid: true, value: value};
-		})
-		)
 
-	.then(function(isEmpyOrNull){
-		if(isEmpyOrNull) return reponse.json({error: 'El atributo '+isEmpyOrNull.value+' es requerido'});
-		else return next();
-	}).done();
+	for(var x = 0; x<=requiredFields.length-1; x++){
+		if(typeof data[requiredFields[x]] === 'undefined' || !data[requiredFields[x]]) return response.json({error: 'El atributo '+requiredFields[x]+' es requerido'});
+	}
+	return next();
 }
