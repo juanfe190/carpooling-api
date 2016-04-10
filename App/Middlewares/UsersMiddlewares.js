@@ -45,12 +45,13 @@ function checkIfEmailExists(request, response, next){
 function checkRequiredValues(request, response, next){
 	var data = request.body;
 	var requiredFields = ['password', 'email'];
-	Q.fcall(function(){
+	Q.fcall(
 		requiredFields.forEach(function(value, index){
 			if(typeof data[value] === 'undefined' || !data[value]) return {invalid: true, value: value};
-		});
+		})
+		)
 
-	}).then(function(isEmpyOrNull){
+	.then(function(isEmpyOrNull){
 		if(isEmpyOrNull) return reponse.json({error: 'El atributo '+isEmpyOrNull.value+' es requerido'});
 		else return next();
 	}).done();
