@@ -16,6 +16,7 @@ function store(request, response){
 	var data = request.body;
 
 	var user = new usersModel({
+		image: data.image,
 		name: data.name,
 		lastname: data.lastname,
 		city: {

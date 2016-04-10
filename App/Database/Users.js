@@ -7,7 +7,7 @@ function unique(value, callback){
   });
 }
 var usersSchema = new Schema({
-    picture: 'string',
+    image: 'string',
   	name: {type: 'string', required: true},
   	lastname: {type: 'string', required: true},
   	city: {
