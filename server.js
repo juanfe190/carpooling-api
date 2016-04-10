@@ -80,7 +80,7 @@ app.get('/provincia/canton/:id', ProvinceController.getCanton);
 
 //CARRERAS
 app.get('/carrera/all', CarrerasController.all);
-app.post('carrera/registrar', CarrerasController.store);
+app.post('/carrera/registrar', CarrerasController.store);
 
 //__TESTING
 app.get('/test', require('./App/Controllers/RidesController').store);
