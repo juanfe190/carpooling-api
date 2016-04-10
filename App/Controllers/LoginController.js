@@ -15,10 +15,10 @@ function LoginController(request, response){
 	var email = request.body.email;
 	var password = request.body.password;
 
-	checkUserAndPass(email, password, function(loginStatus){
+	checkUserAndPass(email, password, function(loginStatus, objUser){
 		if(loginStatus){
 			var token = jwt.sign({email: email}, constants.jwtPrivateKey);
-			return response.json({status: 'ok', token: token});
+			return response.json({status: 'ok', token: token, user: objUser});
 		}else return response.json({status: 'denied'});
 	});
 }
@@ -35,6 +35,6 @@ function checkUserAndPass(email, password, callback){
 	usersModel.findOne({'email': email}, function(err, objUser){
 		if(err) return console.log('Error en query: '+err);
 		
-		return callback(bcrypt.compare(password, objUser.password));
+		return callback(bcrypt.compare(password, objUser.password), objUser);
 	});	
 }
