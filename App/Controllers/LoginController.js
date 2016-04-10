@@ -1,4 +1,4 @@
-var usersModel = require('../Database/Users');
+var usersModel = require('../Database/Users').usersModel;
 var bcrypt = require('../Util/BCrypt');
 var jwt = require('jsonwebtoken');
 var constants = require('../Util/constants');
