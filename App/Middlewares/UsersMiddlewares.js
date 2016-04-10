@@ -24,9 +24,9 @@ function checkIfEmailExists(request, response, next){
 	var email = request.params.email || request.body.email;
 	if(!email) return response.json({error: 'El email del usuario no fue encontrado en el request'});
 
-	var user = usersModel.count({email: email}, function(err, docs){
+	var user = usersModel.count({email: email}, function(err, count){
 		if(err) return response.json({error: err});
-		if(!docs) return next();
+		if(count>0) return next();
 
 		return response.json({error: 'El email especificado no existe'});
 	});
