@@ -1,4 +1,5 @@
 var usersModel = require('../Database/Users').usersModel;
+var carrerasModel = require('../Database/Users').carrerasModel;
 var bcrypt = require('../Util/BCrypt');
 
 module.exports = {
@@ -30,10 +31,7 @@ function store(request, response){
 	        }
 	    },
 	    age: data.age,
-	    study: {
-	        value: data.study.value,
-	        name: data.study.name
-	    },
+	    study: data.study,
 		whatsapp: data.whatsapp,
 		email: data.email,
 		password: bcrypt.hash(data.password),
@@ -42,7 +40,12 @@ function store(request, response){
 
 	user.save(function(err, userObj){
 		if(err) return response.json({error: err});
-		return response.json(userObj);
+		
+		carrerasModel.findOne(userObj.study).populate('_study').exec(function(err, userObj){
+			if(err) return response.json({error: err});
+
+			return response.json(userObj);
+		});
 	});
 }
 

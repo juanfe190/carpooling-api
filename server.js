@@ -36,12 +36,20 @@ require('./App/Database/connection');
 /**********************
 ********ROUTING********
 ***********************/
+
+/***CONTROLLERS***/
+var UsersController = require('./App/Controllers/UsersController');
+var ProvinceController = require('./App/Controllers/ProvincesController');
+var CarrerasController = require('./App/Controllers/CarrerasController');
+
+/***MIDDLEWARES***/
+var UsersMiddlewares = require('./App/Middlewares/UsersMiddlewares');
+
+/***ROUTES***/
 app.get('/', function(request, response){
 	response.json({status: 'ok'});
 });
 
-var UsersController = require('./App/Controllers/UsersController');
-var UsersMiddlewares = require('./App/Middlewares/UsersMiddlewares');
 //LOGIN
 app.post('/login', 
 	UsersMiddlewares.checkIfEmailExists,
@@ -67,9 +75,12 @@ app.delete('/usuario/eliminar',
 	UsersController.destroy);
 
 //PROVINCIAS
-var ProvinceController = require('./App/Controllers/ProvincesController');
 app.get('/provincia/all', ProvinceController.getAllProvinces);
 app.get('/provincia/canton/:id', ProvinceController.getCanton);
 
-//TESTING
+//CARRERAS
+app.get('/carrera/all', CarrerasController.all);
+app.post('carrera/registrar', CarrerasController.store);
+
+//__TESTING
 app.get('/test', require('./App/Controllers/RidesController').store);

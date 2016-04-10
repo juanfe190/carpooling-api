@@ -21,9 +21,9 @@ var usersSchema = new Schema({
           }
       },
       age: 'number',
-      study: {
-          value: 'string',
-          name: 'string'
+      _study: {
+          type: Schema.Types.ObjectId,
+          ref: 'carreras'
       },
   	whatsapp: 'number',
   	email: {
