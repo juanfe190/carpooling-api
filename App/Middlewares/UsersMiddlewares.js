@@ -45,6 +45,6 @@ function checkRequiredValues(request, response, next){
 	var data = request.body;
 	var requiredFields = ['password', 'email'];
 	requiredFields.forEach(function(value, index){
-		if(typeof data[value] === 'undefined' || data[value]) return response.json({error: 'El atributo '+value+' es requerido'});
+		if(typeof data[value] === 'undefined' || !data[value]) return response.json({error: 'El atributo '+value+' es requerido'});
 	});
 }
