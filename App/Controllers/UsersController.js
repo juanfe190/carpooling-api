@@ -31,7 +31,7 @@ function store(request, response){
 	        }
 	    },
 	    age: data.age,
-	    study: data.study,
+	    _study: data.study,
 		whatsapp: data.whatsapp,
 		email: data.email,
 		password: bcrypt.hash(data.password),
@@ -41,7 +41,7 @@ function store(request, response){
 	user.save(function(err, userObj){
 		if(err) return response.json({error: err});
 		
-		carrerasModel.findOne(userObj.study).populate('_study').exec(function(err, userObj){
+		usersModel.findOne(userObj.study).populate('_study').exec(function(err, userObj){
 			if(err) return response.json({error: err});
 
 			return response.json(userObj);
