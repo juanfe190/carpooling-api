@@ -41,7 +41,7 @@ function store(request, response){
 
 	user.save(function(err, userObj){
 		if(err) return response.json({error: err});
-		return response.json({status: 'ok'});
+		return response.json(userObj);
 	});
 }
 
