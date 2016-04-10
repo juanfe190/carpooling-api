@@ -1,8 +1,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var usersSchema = require('./Users').usersSchema;
-
 var ridesSchema = new Schema({
       from: {
         province: 'string',
@@ -15,8 +13,8 @@ var ridesSchema = new Schema({
       departureTime: 'string',
       date: 'date',
       seatsAvailable: 'number',
-      owner: usersSchema,
-      joinedUsers: [usersSchema],
+      _owner: {type: Schema.Types.ObjectId, ref: 'Users'},
+      _joinedUsers: [{type: Schema.Types.ObjectId, ref: 'Users'}],
       waze: 'string'
 });
 

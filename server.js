@@ -6,6 +6,11 @@ var express = require('express'),
 
 var bodyParser = require('body-parser');
 app.use(bodyParser.json());
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 
 //JWT-EXPRESS
 var jwtMiddleware = require('express-jwt');
@@ -64,4 +69,4 @@ app.get('/provincia/all', ProvinceController.getAllProvinces);
 app.get('/provincia/canton/:id', ProvinceController.getCanton);
 
 //TESTING
-app.post('/ride', require('./App/Controllers/RidesController').store);
+app.get('/test', require('./App/Controllers/RidesController').store);

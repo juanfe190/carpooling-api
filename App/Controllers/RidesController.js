@@ -1,3 +1,5 @@
+var Q = require('q');
+
 var ridesModel = require('../Database/Rides').ridesModel;
 var usersModel = require('../Database/Users').usersModel;
 module.exports={
@@ -27,26 +29,27 @@ function all(callback){
 * @Function callback
 */
 function store(data, callback){
-	usersModel.findOne({email: data.owner}, function(err, userObj){
+	var ride = new ridesModel({
+		from: {
+	        province: data.from.province,
+	        canton: data.from.canton
+	      },
+	      to: {
+	        province: data.to.province,
+	        canton: data.to.canton
+	      },
+	      departureTime: data.departureTime,
+	      date: data.date,
+	      seatsAvailable: data.seatsAvailable,
+	      _owner: data.owner
+	});
+	
+	ride.save(function(err, rideObj){
 		if(err) return callback(err, null);
-		var ride = new ridesModel({
-			from: {
-		        province: data.from.province,
-		        canton: data.from.canton
-		      },
-		      to: {
-		        province: data.to.province,
-		        canton: data.to.canton
-		      },
-		      departureTime: data.departureTime,
-		      date: data.date,
-		      seatsAvailable: data.seatsAvailable,
-		      owner: userObj,
-		      joinedUsers: []
-		});
-		
-		ride.save(function(err, rideObj){
+		ridesModel.findById(rideObj._id).populate('_owner').exec(function(err, result){
 			if(err) return callback(err, null);
+			if(!rideObj.owner) return callback('El owner dado no existe', null);
+
 			return callback(null, rideObj);
 		});
 	});
@@ -89,10 +92,10 @@ function addJoinedUsers(params, callback){
 
 		ridesModel.findById(params.rideId, function(err, rideObj){
 			if(err) return callback(err);
-
 			rideObj.joinedUsers.push(userObj);
 			rideObj.save();
 			return callback(null);
 		});
 	});
 }
+
