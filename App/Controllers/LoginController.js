@@ -34,7 +34,7 @@ function LoginController(request, response){
 function checkUserAndPass(email, password, callback){
 	usersModel.findOne({'email': email}, function(err, objUser){
 		if(err) return console.log('Error en query: '+err);
-		
+
 		return callback(bcrypt.compare(password, objUser.password), objUser);
 	});	
 }

@@ -39,13 +39,15 @@ require('./App/Database/connection');
 app.get('/', function(request, response){
 	response.json({status: 'ok'});
 });
-//LOGIN
-app.post('/login', require('./App/Controllers/LoginController'));
 
-//USERS
 var UsersController = require('./App/Controllers/UsersController');
 var UsersMiddlewares = require('./App/Middlewares/UsersMiddlewares');
+//LOGIN
+app.post('/login', 
+	UsersMiddlewares.checkIfEmailExists,
+	require('./App/Controllers/LoginController'));
 
+//USERS
 app.post('/usuario/registrar',
 	 UsersController.store);
 
