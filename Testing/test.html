@@ -45,9 +45,16 @@
 		});
 		
 	}
+
+	function findByOwner(){
+		var id = document.getElementById('id').value;
+		socket.emit('getRideByOwner', id);
+	}
+
 	//**Listeners**//
 	socket.on('err', function(data){console.error(data)});
 	socket.on('updateClientRides', function(data){printRides(data)});
+	socket.on('getRide', function(data){console.log(data)});
 
 	function sendJson(){
 		$.post('https://carpool-ulacit.rhcloud.com/usuario/registrar','', function(data, status){
@@ -62,7 +69,8 @@
 ID: <input type="text" id="id"></input><br>
 EMAIL: <input type="text" id="email">
 <button onclick="eliminar()">Eliminar</button>
-<button onclick="joinear()">Unirse</button><br><br>
+<button onclick="joinear()">Unirse</button>
+<button onclick="findByOwner()">Find by owner</button><br><br>
 <div>
 	<ul id="rides"></ul>
 </div>

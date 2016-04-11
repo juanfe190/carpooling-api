@@ -7,7 +7,9 @@ module.exports={
 	store,
 	destroy,
 	addJoinedUsers,
-	all
+	all,
+	findByOwner, 
+	find
 };
 
 /**
@@ -81,6 +83,26 @@ function find(id, callback){
 	.exec(function(error, rideObj){
 		if(error) return callback(err, null);
 
+		return callback(null, rideObj);
+	});
+}
+
+/**
+* Buscar ride por owner
+*
+* @param ID del owner
+*/
+function findByOwner(owner, callback){
+	ridesModel.findOne({owner: owner})
+	.populate({
+		path: 'owner',
+		populate: {path: 'study'}
+	})
+	.exec(function(err, rideObj){
+		if(err) return callback(err, null);
+		if(!rideObj) return callback('Ride no encontrado', null);
+
+		console.log('find by owner: '+rideObj);
 		return callback(null, rideObj);
 	});
 }

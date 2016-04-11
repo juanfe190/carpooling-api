@@ -11,6 +11,7 @@ function startConnection(io){
 	io.on('connection', function(socket){
 		//Acciones globales
 		socket.on('getRides', sendRidesToClient);
+		socket.on('getRideByOwner', sendRideByOwner.bind(null, socket));
 		socket.on('createRide', createRide.bind(null, socket));
 		socket.on('deleteRide', deleteRide.bind(null, socket));
 		socket.on('joinRide', joinRide.bind(null, socket));
@@ -93,6 +94,14 @@ function sendRidesToClient(){
 		if(err) return socket.emit('err', {msg: err});
 
 		globalio.emit('updateClientRides', ridesObj);
+	});
+}
+
+function sendRideByOwner(socket, owner){
+	RidesController.findByOwner(owner, function(err, rideObj){
+		if(err) return socket.emit('err', {msg: err});
+		
+		socket.emit('getRide', rideObj);
 	});
 }
 
