@@ -5,7 +5,7 @@
 	<script src="https://cdn.socket.io/socket.io-1.0.6.js"></script>
 	<script   src="https://code.jquery.com/jquery-2.2.3.min.js"   integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo="   crossorigin="anonymous"></script>
 	<script>
-	  var socket = io('ws://localhost:3000');
+	  var socket = io('wss://carpool-ulacit.rhcloud.com:8443');
 	  
 
 	socket.emit('getRides');
@@ -29,7 +29,8 @@
 		    },
 		    "departureTime": "6:00 pm",
 		    "seatsAvailable": 5,
-		    "owner": "570b325151b7698ea983684b",
+		    "owner": "570b3bc4d45066d4b31c89c8",
+		    "date": new Date()
 		});
 	};
 

@@ -16,15 +16,15 @@ function populateCity(data, key){
 
 
 
-	data[key]={
-		province: {
-			value: valueProvince,
-			name: nameProvince
-		},
-		canton: {
-			value: indexCanton,
-			name: objCanton.Nombre
-		}
+	data[key].province = 
+	{
+		value: valueProvince,
+		name: nameProvince
+	};
+	data[key].canton = 
+	{
+		value: indexCanton,
+		name: objCanton.Nombre
 	};
 	return data;
 }

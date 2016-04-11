@@ -34,7 +34,7 @@ function all(callback){
 * Crea un nuevo ride en BD
 * 
 * @param Object
-* @Function callback--------------------------------------------------------
+* @Function callback
 */
 function store(data, callback){
 
