@@ -39,20 +39,7 @@ function store(data, callback){
 Q.fcall(util.populateCity.bind(null, data, 'from'))
 .then(util.populateCity.bind(null, data, 'to'))
 .then(function(data){
-	var ride = new ridesModel({
-		from: {
-	        province: data.from.province,
-	        canton: data.from.canton
-	      },
-	      to: {
-	        province: data.to.province,
-	        canton: data.to.canton
-	      },
-	      departureTime: data.departureTime,
-	      date: data.date,
-	      seatsAvailable: data.seatsAvailable,
-	      owner: data.owner
-	});
+	var ride = new ridesModel(data);
 
 	ride.save(function(err, rideObj){
 		if(err) return callback(err, null);
