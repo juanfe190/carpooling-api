@@ -31,7 +31,7 @@ function store(request, response){
 	        }
 	    },
 	    age: data.age,
-	    _study: data.study,
+	    study: data.study,
 		whatsapp: data.whatsapp,
 		email: data.email,
 		password: bcrypt.hash(data.password),
@@ -41,7 +41,7 @@ function store(request, response){
 	user.save(function(err, userObj){
 		if(err) return response.json({error: err});
 		
-		usersModel.findOne(userObj).populate('_study').exec(function(err, userObj){
+		usersModel.findOne(userObj).populate('study').exec(function(err, userObj){
 			if(err) return response.json({error: err});
 
 			return response.json(userObj);
