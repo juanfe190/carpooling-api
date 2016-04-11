@@ -61,15 +61,15 @@ function checkRequiredValues(request, response, next){
 */
 function populateCity(request, response, next){
 	var valueProvince = request.body.city.province;
-	var valueCanton = request.body.city.canton;
+	var indexCanton = request.body.city.canton;
 	try{
 		var nameProvince = Province[valueProvince].Nombre;
-		var nameCanton = Canton[valueCanton].Nombre;
+		var objCanton = getCantones(valueProvince)[indexCanton];
 	}catch(err) {return response.json({error: 'Error al poblar city, verifique el formato del JSON y que el value exista'});}
 	
 
 	if(!nameProvince) return response.json({error: 'Provincia no encontrada'});
-	if(!nameCanton) return response.json({error: 'Canton no encontrado'});
+	if(!objCanton) return response.json({error: 'Canton no encontrado'});
 
 	request.body['city']={
 		province: {
@@ -77,10 +77,24 @@ function populateCity(request, response, next){
 			name: nameProvince
 		},
 		canton: {
-			value: valueCanton,
-			name: nameCanton
+			value: indexCanton,
+			name: objCanton.Nombre
 		}
 	};
 
 	next();
+}
+
+/**
+* Busca los cantones de una provincia, similar al controller pero 
+* se utiliza como private solo en esta clase
+*/
+function getCantones(id){
+	var cantones = [];
+
+	for(var key in Canton){
+		if(Canton[key].Provincia==id) cantones.push(Canton[key]);
+	}
+
+	return cantones;
 }

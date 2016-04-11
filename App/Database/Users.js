@@ -16,7 +16,7 @@ var usersSchema = new Schema({
             name: 'string'
           },
           canton: {
-            value: 'number',
+            value: 'number', //EL VALUE DEL CANTON ES EL INDEX AL RECIBIR TODOS LOS CANTONES DE CADA PROVINCIA
             name: 'string'
           }
       },
