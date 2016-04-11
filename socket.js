@@ -11,7 +11,8 @@ function startConnection(io){
 	io.on('connection', function(socket){
 		//Acciones globales
 		socket.on('getRides', sendRidesToClient);
-		socket.on('getRideByOwner', sendRideByOwner.bind(null, socket));
+		socket.on('getRideById', sendRideById.bind(null, socket))
+		socket.on('getRidesByOwner', sendRidesByOwner.bind(null, socket));
 		socket.on('createRide', createRide.bind(null, socket));
 		socket.on('deleteRide', deleteRide.bind(null, socket));
 		socket.on('joinRide', joinRide.bind(null, socket));
@@ -97,11 +98,23 @@ function sendRidesToClient(){
 	});
 }
 
-function sendRideByOwner(socket, owner){
+function sendRideById(socket, id){
+	RidesController.find(id, function(err, rideObj){
+		if(err) return socket.emit('err', {msg: err});
+		
+		console.log('FIND BY ID: '+rideObj._id);
+		socket.emit('rideById', rideObj);
+	});
+}
+
+/**
+* Enviar rides de un owner en especifico
+*/
+function sendRidesByOwner(socket, owner){
 	RidesController.findByOwner(owner, function(err, rideObj){
 		if(err) return socket.emit('err', {msg: err});
 		
-		socket.emit('getRide', rideObj);
+		socket.emit('rideByOwner', rideObj);
 	});
 }
 

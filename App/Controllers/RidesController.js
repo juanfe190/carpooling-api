@@ -80,8 +80,8 @@ function find(id, callback){
 		populate: {path: 'study'}
 	})
 	.populate('joinedUsers')
-	.exec(function(error, rideObj){
-		if(error) return callback(err, null);
+	.exec(function(err, rideObj){
+		if(err) return callback(err, null);
 
 		return callback(null, rideObj);
 	});
@@ -93,7 +93,7 @@ function find(id, callback){
 * @param ID del owner
 */
 function findByOwner(owner, callback){
-	ridesModel.findOne({owner: owner})
+	ridesModel.find({owner: owner})
 	.populate({
 		path: 'owner',
 		populate: {path: 'study'}
