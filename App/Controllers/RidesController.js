@@ -7,9 +7,7 @@ module.exports={
 	store,
 	destroy,
 	addJoinedUsers,
-	all,
-	findByOwner, 
-	find
+	all
 };
 
 /**
@@ -110,19 +108,16 @@ function findByOwner(owner, callback){
 /**
 * Agrega usuario al ride
 *
-* @param Object ({email: 'String', rideId: 'String'})
+* @param Object ({user: 'Objectid de user', ride: 'Objectid de ride'})
 * @param function callback
 */
 function addJoinedUsers(params, callback){
-	usersModel.findOne({email: params.email}, function(err, userObj){
+	ridesModel.findById(params.ride, function(err, rideObj){
 		if(err) return callback(err);
-
-		ridesModel.findById(params.rideId, function(err, rideObj){
-			if(err) return callback(err);
-			rideObj.joinedUsers.push(userObj);
-			rideObj.save();
-			return callback(null);
-		});
+		if(rideObj.seatsAvailable<=0) return callback('No quedan campos disponibles');
+		
+		rideObj.joinedUsers.push(params.user);
+		rideObj.save();
+		return callback(null);
 	});
-}
 
