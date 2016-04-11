@@ -13,9 +13,9 @@
 		socket.emit('deleteRide', document.getElementById('id').value);
 	}
 	function joinear(){
-		var id = document.getElementById('id').value;
-		var email = document.getElementById('email').value;
-		socket.emit('joinRide', {email: email, rideId: id});
+		var idRide = document.getElementById('id').value;
+		var idUser = document.getElementById('email').value;
+		socket.emit('joinRide', {user: idUser, ride: idRide});
 	}
 	function create(){
 		socket.emit('createRide', {
@@ -66,8 +66,8 @@
 
 <body>
 <button onclick="create()">Crear ride</button><br><br>
-ID: <input type="text" id="id"></input><br>
-EMAIL: <input type="text" id="email">
+ID RIDE: <input type="text" id="id"></input><br>
+ID USER: <input type="text" id="email">
 <button onclick="eliminar()">Eliminar</button>
 <button onclick="joinear()">Unirse</button>
 <button onclick="findByOwner()">Find by owner</button><br><br>
