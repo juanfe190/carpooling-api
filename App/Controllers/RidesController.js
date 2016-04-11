@@ -115,9 +115,9 @@ function addJoinedUsers(params, callback){
 	ridesModel.findById(params.ride, function(err, rideObj){
 		if(err) return callback(err);
 		if(rideObj.seatsAvailable<=0) return callback('No quedan campos disponibles');
-		
+
 		rideObj.joinedUsers.push(params.user);
 		rideObj.save();
 		return callback(null);
 	});
-
+}
