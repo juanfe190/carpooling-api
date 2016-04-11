@@ -2,6 +2,7 @@ var Q = require('q');
 
 var ridesModel = require('../Database/Rides').ridesModel;
 var usersModel = require('../Database/Users').usersModel;
+var util = require('../Util/_RidesControllerUtil');
 module.exports={
 	store,
 	destroy,
@@ -18,6 +19,7 @@ function all(callback){
 	ridesModel.find({})
 	.populate('joinedUsers')
 	.populate('owner')
+	.populate('owner.study')
 	.exec(function(err, ridesObj){
 		if(err) return callback(err, null);
 
@@ -33,14 +35,14 @@ function all(callback){
 * @Function callback
 */
 function store(data, callback){
+
+Q.fcall(util.populateCity.bind(null, data, 'from'))
+.then(util.populateCity.bind(null, data, 'to'))
+.then(function(data){
 	var ride = new ridesModel({
 		from: {
-	        province: {
-	        	value: data.from.province,
-	        },
-	        canton: {
-	        	value:  data.from.canton
-	        }
+	        province: data.from.province,
+	        canton: data.from.canton
 	      },
 	      to: {
 	        province: data.to.province,
@@ -51,19 +53,16 @@ function store(data, callback){
 	      seatsAvailable: data.seatsAvailable,
 	      owner: data.owner
 	});
-	
+
 	ride.save(function(err, rideObj){
 		if(err) return callback(err, null);
-
 		ridesModel.findOne(rideObj).populate('owner').exec(function(err, result){
 			if(err) return callback(err, null);
-
-			console.log(result);
 			if(!rideObj.owner) return callback('El owner dado no existe', null);
-
 			return callback(null, rideObj);
 		});
 	});
+}).done();
 }
 
 /**
@@ -87,6 +86,7 @@ function find(id, callback){
 	ridesModel.findById(id)
 	.populate('owner')
 	.populate('joinedUsers')
+	.populate('owner.study')
 	.exec(function(error, rideObj){
 		if(error) return callback(err, null);
 

@@ -5,19 +5,18 @@ var Canton = require('./Provincias/cantones');
 * Cambia el request city e imita un 'populate' 
 *
 */
-function populateCity(rideObj, key, callback){
-	var valueProvince = rideObj[key].province;
-	var indexCanton = rideObj[key].canton;
+function populateCity(data, key){
+	var valueProvince = data[key].province;
+	var indexCanton = data[key].canton;
 	try{
 		var nameProvince = Province[valueProvince].Nombre;
 		var objCanton = getCantones(valueProvince)[indexCanton];
-	}catch(err) {return response.json({error: 'Error al poblar city, verifique el formato del JSON y que el value exista'});}
+	}catch(err) {console.log('Error')}
 	
 
-	if(!nameProvince) return response.json({error: 'Provincia no encontrada'});
-	if(!objCanton) return response.json({error: 'Canton no encontrado'});
 
-	rideObj[key]={
+
+	data[key]={
 		province: {
 			value: valueProvince,
 			name: nameProvince
@@ -27,5 +26,23 @@ function populateCity(rideObj, key, callback){
 			name: objCanton.Nombre
 		}
 	};
-	return rideObj.save();
+	return data;
+}
+
+/**
+* Busca los cantones de una provincia, similar al controller pero 
+* se utiliza como private solo en esta clase
+*/
+function getCantones(id){
+	var cantones = [];
+
+	for(var key in Canton){
+		if(Canton[key].Provincia==id) cantones.push(Canton[key]);
+	}
+
+	return cantones;
+}
+
+module.exports = {
+	populateCity
 }
