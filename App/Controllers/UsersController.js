@@ -83,10 +83,7 @@ function update(request, response){
 	        }
 	    },
 	    age: data.age,
-	    study: {
-	        value: data.study.value,
-	        name: data.study.name
-	    },
+	    study: data.study,
 		whatsapp: data.whatsapp,
 		email: data.email,
 		password: bcrypt.hash(data.password)
