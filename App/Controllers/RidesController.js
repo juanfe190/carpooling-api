@@ -15,9 +15,13 @@ module.exports={
 * @param Function callback
 */
 function all(callback){
-	ridesModel.find({}, function(err, ridesObj){
+	ridesModel.find({})
+	.populate('joinedUsers')
+	.populate('owner')
+	.exec(function(err, ridesObj){
 		if(err) return callback(err, null);
 
+		
 		return callback(null, ridesObj);
 	});
 }
@@ -80,7 +84,10 @@ function destroy(id, callback){
 * Busca ride por ID
 */
 function find(id, callback){
-	ridesModel.findById(id, function(error, rideObj){
+	ridesModel.findById(id)
+	.populate('owner')
+	.populate('joinedUsers')
+	.exec(function(error, rideObj){
 		if(error) return callback(err, null);
 
 		return callback(null, rideObj);
