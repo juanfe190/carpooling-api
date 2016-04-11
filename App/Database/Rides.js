@@ -13,8 +13,8 @@ var ridesSchema = new Schema({
       departureTime: 'string',
       date: 'date',
       seatsAvailable: 'number',
-      _owner: {type: Schema.Types.ObjectId, ref: 'Users'},
-      _joinedUsers: [{type: Schema.Types.ObjectId, ref: 'Users'}],
+      owner: {type: Schema.Types.ObjectId, ref: 'Users'},
+      joinedUsers: [{type: Schema.Types.ObjectId, ref: 'Users'}],
       waze: 'string'
 });
 

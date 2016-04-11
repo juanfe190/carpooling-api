@@ -21,7 +21,7 @@ var usersSchema = new Schema({
           }
       },
       age: 'number',
-      _study: {
+      study: {
           type: Schema.Types.ObjectId,
           ref: 'carreras'
       },
