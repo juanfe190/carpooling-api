@@ -31,8 +31,12 @@ function all(callback){
 function store(data, callback){
 	var ride = new ridesModel({
 		from: {
-	        province: data.from.province,
-	        canton: data.from.canton
+	        province: {
+	        	value: data.from.province,
+	        },
+	        canton: {
+	        	value:  data.from.canton
+	        }
 	      },
 	      to: {
 	        province: data.to.province,
@@ -41,13 +45,16 @@ function store(data, callback){
 	      departureTime: data.departureTime,
 	      date: data.date,
 	      seatsAvailable: data.seatsAvailable,
-	      _owner: data.owner
+	      owner: data.owner
 	});
 	
 	ride.save(function(err, rideObj){
 		if(err) return callback(err, null);
-		ridesModel.findById(rideObj._id).populate('_owner').exec(function(err, result){
+
+		ridesModel.findOne(rideObj).populate('owner').exec(function(err, result){
 			if(err) return callback(err, null);
+
+			console.log(result);
 			if(!rideObj.owner) return callback('El owner dado no existe', null);
 
 			return callback(null, rideObj);

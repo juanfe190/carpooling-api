@@ -18,18 +18,18 @@
 		socket.emit('joinRide', {email: email, rideId: id});
 	}
 	function create(){
-				socket.emit('createRide', {
+		socket.emit('createRide', {
 		    "from": {
 		        "province": 5,
-		        "canton": "San Francisco"
+		        "canton": 1
 		    },
 		    "to": {
-		        "province": "San Jose",
-		        "canton": "San Jose"
+		        "province": 1,
+		        "canton": 1
 		    },
 		    "departureTime": "6:00 pm",
 		    "seatsAvailable": 5,
-		    "owner": "57098644e53b3e1415e421b5",
+		    "owner": "570b325151b7698ea983684b",
 		});
 	};
 

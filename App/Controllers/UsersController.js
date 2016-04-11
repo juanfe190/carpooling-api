@@ -41,7 +41,9 @@ function store(request, response){
 	user.save(function(err, userObj){
 		if(err) return response.json({error: err});
 		
-		usersModel.findOne(userObj).populate('study').exec(function(err, userObj){
+		usersModel.findOne(userObj)
+		.populate('study')
+		.exec(function(err, userObj){
 			if(err) return response.json({error: err});
 
 			return response.json(userObj);
@@ -54,10 +56,12 @@ function store(request, response){
 */
 function find(request, response){
 	var id = request.params.id;
-	usersModel.findById(id, function(error, user){
-		if(error) return response.json({error: error});
+	usersModel.findById(id)
+	.populate('study')
+	.exec(function(err, userObj){
+		if(err) return response.json({error: error});
 
-		return response.json(user);
+		return response.json(userObj);
 	});
 }
 

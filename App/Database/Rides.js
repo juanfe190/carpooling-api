@@ -3,12 +3,26 @@ var Schema = mongoose.Schema;
 
 var ridesSchema = new Schema({
       from: {
-        province: 'string',
-        canton: 'string'
+        province: {
+            value: 'number',
+            name: 'string'
+          },
+          canton: {
+            value: 'number', //EL VALUE DEL CANTON ES EL INDEX AL RECIBIR TODOS LOS CANTONES DE CADA PROVINCIA
+            name: 'string'
+          },
+          details: 'string'
       },
       to: {
-        province: 'string',
-        canton: 'string'
+        province: {
+            value: 'number',
+            name: 'string'
+          },
+          canton: {
+            value: 'number', //EL VALUE DEL CANTON ES EL INDEX AL RECIBIR TODOS LOS CANTONES DE CADA PROVINCIA
+            name: 'string'
+          },
+          details: 'string'
       },
       departureTime: 'string',
       date: 'date',
