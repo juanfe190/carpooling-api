@@ -1,8 +1,12 @@
 var usersModel = require('../Database/Users').usersModel;
+var Province = require('../Util/Provincias/provincias');
+var Canton = require('../Util/Provincias/cantones');
+
 module.exports = {
 	checkIfExists,
 	checkIfEmailExists,
-	checkRequiredValues
+	checkRequiredValues,
+	populateCity
 };
 
 /**
@@ -49,4 +53,34 @@ function checkRequiredValues(request, response, next){
 		if(typeof data[requiredFields[x]] === 'undefined' || !data[requiredFields[x]]) return response.json({error: 'El atributo '+requiredFields[x]+' es requerido'});
 	}
 	return next();
+}
+
+/**
+* Cambia el request city e imita un 'populate' 
+*
+*/
+function populateCity(request, response, next){
+	var valueProvince = request.body.city.province;
+	var valueCanton = request.body.city.canton;
+	try{
+		var nameProvince = Province[valueProvince].Nombre;
+		var nameCanton = Canton[valueCanton].Nombre;
+	}catch(err) {return response.json({error: 'Error al poblar city, verifique el formato del JSON y que el value exista'});}
+	
+
+	if(!nameProvince) return response.json({error: 'Provincia no encontrada'});
+	if(!nameCanton) return response.json({error: 'Canton no encontrado'});
+
+	request.body['city']={
+		province: {
+			value: valueProvince,
+			name: nameProvince
+		},
+		canton: {
+			value: valueCanton,
+			name: nameCanton
+		}
+	};
+
+	next();
 }
