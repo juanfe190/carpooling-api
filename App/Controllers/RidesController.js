@@ -18,8 +18,10 @@ module.exports={
 function all(callback){
 	ridesModel.find({})
 	.populate('joinedUsers')
-	.populate('owner')
-	.populate('owner.study')
+	.populate({
+		path: 'owner',
+		populate: {path: 'study'}
+	})
 	.exec(function(err, ridesObj){
 		if(err) return callback(err, null);
 
@@ -32,7 +34,7 @@ function all(callback){
 * Crea un nuevo ride en BD
 * 
 * @param Object
-* @Function callback
+* @Function callback--------------------------------------------------------
 */
 function store(data, callback){
 
@@ -71,9 +73,11 @@ function destroy(id, callback){
 */
 function find(id, callback){
 	ridesModel.findById(id)
-	.populate('owner')
+	.populate({
+		path: 'owner',
+		populate: {path: 'study'}
+	})
 	.populate('joinedUsers')
-	.populate('owner.study')
 	.exec(function(error, rideObj){
 		if(error) return callback(err, null);
 
