@@ -5,7 +5,7 @@
 	<script src="https://cdn.socket.io/socket.io-1.0.6.js"></script>
 	<script   src="https://code.jquery.com/jquery-2.2.3.min.js"   integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo="   crossorigin="anonymous"></script>
 	<script>
-	  var socket = io('ws://localhost:3000');
+	  var socket = io('wss://carpool-ulacit.rhcloud.com:8443');
 	  
 
 	socket.emit('getRides');
@@ -13,23 +13,24 @@
 		socket.emit('deleteRide', document.getElementById('id').value);
 	}
 	function joinear(){
-		var id = document.getElementById('id').value;
-		var email = document.getElementById('email').value;
-		socket.emit('joinRide', {email: email, rideId: id});
+		var idRide = document.getElementById('id').value;
+		var idUser = document.getElementById('email').value;
+		socket.emit('joinRide', {user: idUser, ride: idRide});
 	}
 	function create(){
-				socket.emit('createRide', {
+		socket.emit('createRide', {
 		    "from": {
 		        "province": 5,
-		        "canton": "San Francisco"
+		        "canton": 1
 		    },
 		    "to": {
-		        "province": "San Jose",
-		        "canton": "San Jose"
+		        "province": 1,
+		        "canton": 1
 		    },
 		    "departureTime": "6:00 pm",
 		    "seatsAvailable": 5,
-		    "owner": "57098644e53b3e1415e421b5",
+		    "owner": "570b3bc4d45066d4b31c89c8",
+		    "date": new Date()
 		});
 	};
 
@@ -45,9 +46,16 @@
 		});
 		
 	}
+
+	function findByOwner(){
+		var id = document.getElementById('id').value;
+		socket.emit('getRideById', id);
+	}
+
 	//**Listeners**//
 	socket.on('err', function(data){console.error(data)});
 	socket.on('updateClientRides', function(data){printRides(data)});
+	socket.on('rideById', function(data){console.log(data)});
 
 	function sendJson(){
 		$.post('https://carpool-ulacit.rhcloud.com/usuario/registrar','', function(data, status){
@@ -59,10 +67,11 @@
 
 <body>
 <button onclick="create()">Crear ride</button><br><br>
-ID: <input type="text" id="id"></input><br>
-EMAIL: <input type="text" id="email">
+ID RIDE: <input type="text" id="id"></input><br>
+ID USER: <input type="text" id="email">
 <button onclick="eliminar()">Eliminar</button>
-<button onclick="joinear()">Unirse</button><br><br>
+<button onclick="joinear()">Unirse</button>
+<button onclick="findByOwner()">Find by owner</button><br><br>
 <div>
 	<ul id="rides"></ul>
 </div>

@@ -14,7 +14,7 @@ function startConnection(io){
 		socket.on('createRide', createRide.bind(null, socket));
 		socket.on('deleteRide', deleteRide.bind(null, socket));
 		socket.on('joinRide', joinRide.bind(null, socket));
-		socket.on('disconnect', function(){ onUserDisconnect(socket.email) });	
+		socket.on('disconnect', function(){ onUserDisconnect(socket._id) });	
 	});
 }
 
@@ -30,10 +30,10 @@ function createRide(socket, data){
 		if(err) return socket.emit('err', {msg: err});
 
 		var user = rideObj.owner;
-		socket["email"] = user.email; //Agrega email al socket
+		socket["_id"] = user; //Agrega userID al socket
 		socket.join(rideObj._id); //Crea room, el nombre sera el 'id' del ride
 		activeUsers.push({
-			email: user.email,
+			_id: user,
 			socket: socket,
 			rideId: rideObj._id,
 			type: 'owner'
@@ -65,20 +65,20 @@ function deleteRide(socket, id){
 * Se une a un ride
 *
 * @param Socket usuario unido
-* @param Object ({email: 'String', rideId: 'String'})
+* @param Object ({user: 'Objectid de user', ride: 'Objectid de ride'})
 */
 function joinRide(socket, data){
-	RidesController.addJoinedUsers({email: data.email, rideId: data.rideId}, function(err){
+	RidesController.addJoinedUsers(data, function(err){
 		if(err) return socket.emit('err', {msg: err});
-		socket["email"] = data.email; //Agrega email al socket
-		socket.join(data.rideId); //Ingresa al room con el 'id' del ride
+		socket["_id"] = data.user; //Agrega userID al socket
+		socket.join(data.ride); //Ingresa al room con el 'id' del ride
 		activeUsers.push({
-			email: data.email,
+			_id: data.user,
 			socket: socket,
-			rideId: data.rideId,
+			rideId: data.ride,
 			type: 'user'
 		});
-
+		
 		sendRidesToClient();
 	});
 }

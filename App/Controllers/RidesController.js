@@ -2,6 +2,7 @@ var Q = require('q');
 
 var ridesModel = require('../Database/Rides').ridesModel;
 var usersModel = require('../Database/Users').usersModel;
+var util = require('../Util/_RidesControllerUtil');
 module.exports={
 	store,
 	destroy,
@@ -15,9 +16,16 @@ module.exports={
 * @param Function callback
 */
 function all(callback){
-	ridesModel.find({}, function(err, ridesObj){
+	ridesModel.find({})
+	.populate('joinedUsers')
+	.populate({
+		path: 'owner',
+		populate: {path: 'study'}
+	})
+	.exec(function(err, ridesObj){
 		if(err) return callback(err, null);
 
+		
 		return callback(null, ridesObj);
 	});
 }
@@ -29,30 +37,21 @@ function all(callback){
 * @Function callback
 */
 function store(data, callback){
-	var ride = new ridesModel({
-		from: {
-	        province: data.from.province,
-	        canton: data.from.canton
-	      },
-	      to: {
-	        province: data.to.province,
-	        canton: data.to.canton
-	      },
-	      departureTime: data.departureTime,
-	      date: data.date,
-	      seatsAvailable: data.seatsAvailable,
-	      _owner: data.owner
-	});
-	
+
+Q.fcall(util.populateCity.bind(null, data, 'from'))
+.then(util.populateCity.bind(null, data, 'to'))
+.then(function(data){
+	var ride = new ridesModel(data);
+
 	ride.save(function(err, rideObj){
 		if(err) return callback(err, null);
-		ridesModel.findById(rideObj._id).populate('_owner').exec(function(err, result){
+		ridesModel.findOne(rideObj).populate('owner').exec(function(err, result){
 			if(err) return callback(err, null);
 			if(!rideObj.owner) return callback('El owner dado no existe', null);
-
 			return callback(null, rideObj);
 		});
 	});
+}).done();
 }
 
 /**
@@ -73,9 +72,35 @@ function destroy(id, callback){
 * Busca ride por ID
 */
 function find(id, callback){
-	ridesModel.findById(id, function(error, rideObj){
-		if(error) return callback(err, null);
+	ridesModel.findById(id)
+	.populate({
+		path: 'owner',
+		populate: {path: 'study'}
+	})
+	.populate('joinedUsers')
+	.exec(function(err, rideObj){
+		if(err) return callback(err, null);
 
+		return callback(null, rideObj);
+	});
+}
+
+/**
+* Buscar ride por owner
+*
+* @param ID del owner
+*/
+function findByOwner(owner, callback){
+	ridesModel.find({owner: owner})
+	.populate({
+		path: 'owner',
+		populate: {path: 'study'}
+	})
+	.exec(function(err, rideObj){
+		if(err) return callback(err, null);
+		if(!rideObj) return callback('Ride no encontrado', null);
+
+		console.log('find by owner: '+rideObj);
 		return callback(null, rideObj);
 	});
 }
@@ -83,19 +108,17 @@ function find(id, callback){
 /**
 * Agrega usuario al ride
 *
-* @param Object ({email: 'String', rideId: 'String'})
+* @param Object ({user: 'Objectid de user', ride: 'Objectid de ride'})
 * @param function callback
 */
 function addJoinedUsers(params, callback){
-	usersModel.findOne({email: params.email}, function(err, userObj){
+	ridesModel.findById(params.ride, function(err, rideObj){
 		if(err) return callback(err);
+		if(rideObj.seatsAvailable<=0) return callback('No quedan campos disponibles');
 
-		ridesModel.findById(params.rideId, function(err, rideObj){
-			if(err) return callback(err);
-			rideObj.joinedUsers.push(userObj);
-			rideObj.save();
-			return callback(null);
-		});
+		rideObj.seatsAvailable--;
+		rideObj.joinedUsers.push(params.user);
+		rideObj.save();
+		return callback(null);
 	});
 }
-

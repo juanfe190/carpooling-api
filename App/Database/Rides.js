@@ -3,18 +3,32 @@ var Schema = mongoose.Schema;
 
 var ridesSchema = new Schema({
       from: {
-        province: 'string',
-        canton: 'string'
+        province: {
+            value: 'number',
+            name: 'string'
+          },
+          canton: {
+            value: 'number', //EL VALUE DEL CANTON ES EL INDEX AL RECIBIR TODOS LOS CANTONES DE CADA PROVINCIA
+            name: 'string'
+          },
+          details: 'string'
       },
       to: {
-        province: 'string',
-        canton: 'string'
+        province: {
+            value: 'number',
+            name: 'string'
+          },
+          canton: {
+            value: 'number', //EL VALUE DEL CANTON ES EL INDEX AL RECIBIR TODOS LOS CANTONES DE CADA PROVINCIA
+            name: 'string'
+          },
+          details: 'string'
       },
       departureTime: 'string',
       date: 'date',
       seatsAvailable: 'number',
-      _owner: {type: Schema.Types.ObjectId, ref: 'Users'},
-      _joinedUsers: [{type: Schema.Types.ObjectId, ref: 'Users'}],
+      owner: {type: Schema.Types.ObjectId, ref: 'Users'},
+      joinedUsers: [{type: Schema.Types.ObjectId, ref: 'Users'}],
       waze: 'string'
 });
 

@@ -5,6 +5,7 @@ var express = require('express'),
     server = http.createServer(app);
 
 var bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -25,7 +26,7 @@ var io = require('socket.io').listen(server);
 var ipaddress = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
 var port = process.env.OPENSHIFT_NODEJS_PORT || 3000;
 
-server.listen(port, function(){console.log('App running on port: '+port)});
+server.listen(port, ipaddress, function(){console.log('App running on port: '+port)});
 
 require('./socket').startConnection(io);
 
@@ -35,17 +36,29 @@ require('./App/Database/connection');
 /**********************
 ********ROUTING********
 ***********************/
+
+/***CONTROLLERS***/
+var UsersController = require('./App/Controllers/UsersController');
+var ProvinceController = require('./App/Controllers/ProvincesController');
+var CarrerasController = require('./App/Controllers/CarrerasController');
+
+/***MIDDLEWARES***/
+var UsersMiddlewares = require('./App/Middlewares/UsersMiddlewares');
+
+/***ROUTES***/
 app.get('/', function(request, response){
 	response.json({status: 'ok'});
 });
+
 //LOGIN
-app.post('/login', require('./App/Controllers/LoginController'));
+app.post('/login', 
+	UsersMiddlewares.checkIfEmailExists,
+	require('./App/Controllers/LoginController'));
 
 //USERS
-var UsersController = require('./App/Controllers/UsersController');
-var UsersMiddlewares = require('./App/Middlewares/UsersMiddlewares');
-
 app.post('/usuario/registrar',
+	UsersMiddlewares.checkRequiredValues,
+	UsersMiddlewares.populateCity,
 	 UsersController.store);
 
 app.get('/usuario/:id', 
@@ -64,9 +77,12 @@ app.delete('/usuario/eliminar',
 	UsersController.destroy);
 
 //PROVINCIAS
-var ProvinceController = require('./App/Controllers/ProvincesController');
 app.get('/provincia/all', ProvinceController.getAllProvinces);
 app.get('/provincia/canton/:id', ProvinceController.getCanton);
 
-//TESTING
+//CARRERAS
+app.get('/carrera/all', CarrerasController.all);
+app.post('/carrera/registrar', CarrerasController.store);
+
+//__TESTING
 app.get('/test', require('./App/Controllers/RidesController').store);

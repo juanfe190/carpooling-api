@@ -1,4 +1,4 @@
-var usersModel = require('../Database/Users');
+var usersModel = require('../Database/Users').usersModel;
 var bcrypt = require('../Util/BCrypt');
 var jwt = require('jsonwebtoken');
 var constants = require('../Util/constants');
@@ -15,10 +15,10 @@ function LoginController(request, response){
 	var email = request.body.email;
 	var password = request.body.password;
 
-	checkUserAndPass(email, password, function(loginStatus){
+	checkUserAndPass(email, password, function(loginStatus, objUser){
 		if(loginStatus){
 			var token = jwt.sign({email: email}, constants.jwtPrivateKey);
-			return response.json({status: 'ok', token: token});
+			return response.json({status: 'ok', token: token, user: objUser});
 		}else return response.json({status: 'denied'});
 	});
 }
@@ -32,9 +32,11 @@ function LoginController(request, response){
 * @param Function callback
 */
 function checkUserAndPass(email, password, callback){
-	usersModel.findOne({'email': email}, function(err, objUser){
+	usersModel.findOne({'email': email})
+	.populate('study')
+	.exec(function(err, objUser){
 		if(err) return console.log('Error en query: '+err);
-		
-		return callback(bcrypt.compare(password, objUser.password));
+
+		return callback(bcrypt.compare(password, objUser.password), objUser);
 	});	
 }

@@ -16,14 +16,14 @@ var usersSchema = new Schema({
             name: 'string'
           },
           canton: {
-            value: 'number',
+            value: 'number', //EL VALUE DEL CANTON ES EL INDEX AL RECIBIR TODOS LOS CANTONES DE CADA PROVINCIA
             name: 'string'
           }
       },
       age: 'number',
       study: {
-          value: 'string',
-          name: 'string'
+          type: Schema.Types.ObjectId,
+          ref: 'carreras'
       },
   	whatsapp: 'number',
   	email: {
