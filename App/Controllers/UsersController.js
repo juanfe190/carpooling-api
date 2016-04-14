@@ -9,35 +9,14 @@ module.exports = {
 	destroy
 };
 /**
-* Crea nuevo usuario en la base de datos
+* Crea nuevo usuario en la base de datos. El email se pasa a minusculas
 * 
 * @param Expected request body
 */
 function store(request, response){
 	var data = request.body;
-
-	var user = new usersModel({
-		image: data.image,
-		name: data.name,
-		lastname: data.lastname,
-		city: {
-	        province: {
-	          value: data.city.province.value,
-	          name: data.city.province.name
-	        },
-	        canton: {
-	          value: data.city.canton.value,
-	          name: data.city.canton.name
-	        }
-	    },
-	    age: data.age,
-	    study: data.study,
-		whatsapp: data.whatsapp,
-		email: data.email,
-		password: bcrypt.hash(data.password),
-		since: new Date
-	});
-
+	data["since"] = new Date;
+	var user = new usersModel(data);
 	user.save(function(err, userObj){
 		if(err) return response.json({error: err});
 		
@@ -73,25 +52,7 @@ function update(request, response){
 	var data = request.body;
 
 	var user = usersModel.findById(id);
-	usersModel.update(user, {
-		name: data.name,
-		lastname: data.lastname,
-		city: {
-	        province: {
-	          value: data.city.province.value,
-	          name: data.city.province.name
-	        },
-	        canton: {
-	          value: data.city.canton.value,
-	          name: data.city.canton.name
-	        }
-	    },
-	    age: data.age,
-	    study: data.study,
-		whatsapp: data.whatsapp,
-		email: data.email,
-		password: bcrypt.hash(data.password)
-	}, function(err, count){
+	usersModel.update(user, data, function(err, count){
 		if(err) return response.json({error: err});
 		return response.json({status: 'ok'});
 	});

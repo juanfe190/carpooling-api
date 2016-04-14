@@ -1,23 +1,30 @@
-var RidesController = require('./App/Controllers/RidesController');
+var RideSocketHandler = require('./App/WebSocketHandler/RideSocketHandler');
 
 module.exports = {
 	startConnection
 };
 
 var activeUsers=[];
-var globalio;
 function startConnection(io){
-	globalio = io;
+	RideSocketHandler.configure(io, activeUsers);
 	io.on('connection', function(socket){
 		//Acciones globales
+<<<<<<< HEAD
 		socket.on('getRides', sendRidesToClient);
 		socket.on('createRide', createRide.bind(null, socket));
 		socket.on('deleteRide', deleteRide.bind(null, socket));
 		socket.on('joinRide', joinRide.bind(null, socket));
+=======
+		socket.on('getRides', RideSocketHandler.sendRidesToClient);
+		socket.on('createRide', RideSocketHandler.createRide.bind(null, socket));
+		socket.on('deleteRide', RideSocketHandler.deleteRide.bind(null, socket));
+		socket.on('joinRide', RideSocketHandler.joinRide.bind(null, socket));
+>>>>>>> d54c6ee08936805331cc59fdcb0db32d0c2d2d5b
 		socket.on('disconnect', function(){ onUserDisconnect(socket._id) });	
 	});
 }
 
+<<<<<<< HEAD
 /**
 * Crea un nuevo ride y lo almacena en la BD
 * Agrega a 'activeUsers' el owner de dicho ride
@@ -97,7 +104,12 @@ function sendRidesToClient(){
 }
 
 function onUserDisconnect(email){
+=======
+function onUserDisconnect(id){
+>>>>>>> d54c6ee08936805331cc59fdcb0db32d0c2d2d5b
 	activeUsers = activeUsers.filter(function(user, index){
-		return user.email != email;
+		return user._id != id;
 	});
+
+	console.log(activeUsers);
 }	

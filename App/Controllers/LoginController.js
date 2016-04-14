@@ -12,7 +12,7 @@ module.exports = LoginController;
 * @param express Response
 */
 function LoginController(request, response){
-	var email = request.body.email;
+	var email = request.body.email.toLowerCase();
 	var password = request.body.password;
 
 	checkUserAndPass(email, password, function(loginStatus, objUser){

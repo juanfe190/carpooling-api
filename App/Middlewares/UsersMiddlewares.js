@@ -26,12 +26,13 @@ function checkIfExists(request, response, next){
 }
 
 /**
-* Revisa que el usuario a tratar exista
+* Revisa que el usuario a tratar exista. Ademas cambia el email a lowercaseb
 * @param String email (En body o en URL)
 */
 function checkIfEmailExists(request, response, next){
 	var email = request.params.email || request.body.email;
 	if(!email) return response.json({error: 'El email del usuario no fue encontrado en el request'});
+	email = email.toLowerCase();
 
 	var user = usersModel.count({email: email}, function(err, count){
 		if(err) return response.json({error: err});
