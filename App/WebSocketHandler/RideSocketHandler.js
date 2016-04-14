@@ -1,3 +1,19 @@
+var RidesController = require('../Controllers/RidesController');
+
+module.exports = {
+	configure,
+	createRide,
+	deleteRide,
+	joinRide,
+	sendRidesToClient
+}
+var localio;
+var activeUsers=[];
+
+function configure(io, users){
+	localio = io;
+	activeUsers = users;
+}
 /**
 * Crea un nuevo ride y lo almacena en la BD
 * Agrega a 'activeUsers' el owner de dicho ride
@@ -72,6 +88,6 @@ function sendRidesToClient(){
 	RidesController.all(function(err, ridesObj){
 		if(err) return socket.emit('err', {msg: err});
 
-		globalio.emit('updateClientRides', ridesObj);
+		localio.emit('updateClientRides', ridesObj);
 	});
 }
