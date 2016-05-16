@@ -19,7 +19,10 @@ function LoginController(request, response){
 		if(loginStatus){
 			var token = jwt.sign({email: email}, constants.jwtPrivateKey);
 			return response.json({status: 'ok', token: token, user: objUser});
-		}else return response.json({status: 'denied'});
+		}else {
+			if(objUser.token != '') return response.json({status: 'denied', error: 'Usuario no ha verificado su correo o inactivo'});
+			return response.json({status: 'denied', error: 'datos invalidos'});
+		}
 	});
 }
 
@@ -36,7 +39,9 @@ function checkUserAndPass(email, password, callback){
 	.populate('study')
 	.exec(function(err, objUser){
 		if(err) return console.log('Error en query: '+err);
+		var valido = bcrypt.compare(password, objUser.password);
 
-		return callback(bcrypt.compare(password, objUser.password), objUser);
+		if(objUser.token != '' || !objUser.activo) valido=false;
+		return callback(valido, objUser);
 	});	
 }

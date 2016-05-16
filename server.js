@@ -1,3 +1,5 @@
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
 //EXPRESS FRAMEWORK IMPLEMENTATION
 var express = require('express'),
     http = require('http'),
@@ -60,6 +62,9 @@ app.post('/usuario/registrar',
 	UsersMiddlewares.checkRequiredValues,
 	UsersMiddlewares.populateCity,
 	 UsersController.store);
+
+app.post('/usuario/activar',
+	UsersController.activate);
 
 app.get('/usuario/:id', 
 	//jwtMiddleware({secret: constants.jwtPrivateKey}),

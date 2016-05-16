@@ -32,7 +32,10 @@ var usersSchema = new Schema({
       required: true
     },
   	password: {type: 'string', required: true},
-  	since: 'date'
+    vehicleid: 'string',
+  	since: 'date',
+    token: 'string',
+    activo: 'boolean'
   });
 var usersModel = mongoose.model('Users', usersSchema);
 module.exports = {
