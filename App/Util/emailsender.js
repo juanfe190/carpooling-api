@@ -4,7 +4,7 @@ module.exports = {
 	send
 }
 
-var transporter = nodemailer.createTransport('smtps://juanfe190@gmail.com:password@smtp.gmail.com');
+var transporter = nodemailer.createTransport('smtps://juanfe190@gmail.com:Jf70244097@smtp.gmail.com');
 function send(options){
 	var mailOptions = {
 	    from: options.from || '"Carpooling" <contacto@ulacti.ed.cr>', // sender address

@@ -6,7 +6,8 @@ module.exports = {
 	checkIfExists,
 	checkIfEmailExists,
 	checkRequiredValues,
-	populateCity
+	populateCity,
+	checkIfEmailIsValid
 };
 
 /**
@@ -86,6 +87,19 @@ function populateCity(request, response, next){
 	next();
 }
 
+/*
+* Revisa si el email pertenece a ULACIT utilizando validEmails.json como referencia
+*
+* @author Felix Vasquez
+*/
+function checkIfEmailIsValid(request, response, next){
+	var validDomains = require('../Util/validEmails');
+	var email = request.body.email;
+	var domain = email.split('@')[1];
+
+	if(validDomains.emails.indexOf(domain) < 0) return response.json({error: 'El email ingresado no es valido', status: 'denied'});
+	next();
+}
 /**
 * Busca los cantones de una provincia, similar al controller pero 
 * se utiliza como private solo en esta clase

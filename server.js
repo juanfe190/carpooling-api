@@ -60,6 +60,7 @@ app.post('/login',
 //USERS
 app.post('/usuario/registrar',
 	UsersMiddlewares.checkRequiredValues,
+	UsersMiddlewares.checkIfEmailIsValid,
 	UsersMiddlewares.populateCity,
 	 UsersController.store);
 

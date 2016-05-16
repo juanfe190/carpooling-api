@@ -30,7 +30,7 @@ function store(request, response){
 		.populate('study')
 		.exec(function(err, userObj){
 			if(err) return response.json({error: err});
-			email.send({body: buildMailBody(userObj), to: userObj.email, subject: 'Token de activacion'});
+			//email.send({body: buildMailBody(userObj), to: userObj.email, subject: 'Token de activacion'});
 
 			return response.json(userObj);
 		});
