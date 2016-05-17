@@ -20,7 +20,7 @@ function LoginController(request, response){
 			var token = jwt.sign({username: username}, constants.jwtPrivateKey);
 			return response.json({status: 'ok', token: token, user: objUser});
 		}else {
-			if(objUser.token != '') return response.json({status: 'denied', error: '1002', user: objUser});
+			if(objUser.token != '') return response.json({status: 'denied', error: '1002', email: objUser.email});
 			return response.json({status: 'denied', error: '1001'});
 		}
 	});
