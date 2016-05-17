@@ -65,6 +65,7 @@ app.post('/usuario/registrar',
 	 UsersController.store);
 
 app.post('/usuario/activar',
+	UsersMiddlewares/checkIfEmailExists,
 	UsersController.activate);
 
 app.get('/usuario/:id', 

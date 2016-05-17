@@ -7,7 +7,8 @@ module.exports = {
 	checkIfUsernameExists,
 	checkRequiredValues,
 	populateCity,
-	checkIfEmailIsValid
+	checkIfEmailIsValid,
+	checkIfEmailExists
 };
 
 /**
@@ -28,7 +29,7 @@ function checkIfExists(request, response, next){
 
 /**
 * Revisa que el usuario a tratar exista.
-* @param String email (En body o en URL)
+* @param String username (En body o en URL)
 */
 function checkIfUsernameExists(request, response, next){
 	var username = request.params.username || request.body.username;
@@ -40,6 +41,23 @@ function checkIfUsernameExists(request, response, next){
 		if(count>0) return next();
 
 		return response.json({error: '1000', msg: 'El username especificado no existe'});
+	});
+}
+
+/**
+* Revisa que el email a tratar exista.
+* @param String email (En body o en URL)
+*/
+function checkIfEmailExists(request, response, next){
+	var username = request.params.email || request.body.email;
+	if(!email) return response.json({error: '3000', msg: 'El email no fue encontrado en el request'});
+	email = email.toLowerCase();
+
+	var user = usersModel.count({email: email}, function(err, count){
+		if(err) return response.json({error: err});
+		if(count>0) return next();
+
+		return response.json({error: '1000', msg: 'El email especificado no existe'});
 	});
 }
 
