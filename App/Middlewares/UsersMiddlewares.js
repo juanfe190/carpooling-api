@@ -49,7 +49,7 @@ function checkIfUsernameExists(request, response, next){
 * @param String email (En body o en URL)
 */
 function checkIfEmailExists(request, response, next){
-	var username = request.params.email || request.body.email;
+	var email = request.params.email || request.body.email;
 	if(!email) return response.json({error: '3000', msg: 'El email no fue encontrado en el request'});
 	email = email.toLowerCase();
 
