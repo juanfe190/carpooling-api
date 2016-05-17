@@ -32,14 +32,14 @@ function checkIfExists(request, response, next){
 */
 function checkIfUsernameExists(request, response, next){
 	var username = request.params.username || request.body.username;
-	if(!username) return response.json({error: 'El username no fue encontrado en el request'});
+	if(!username) return response.json({error: '3000', msg: 'El username no fue encontrado en el request'});
 	username = username.toLowerCase();
 
 	var user = usersModel.count({username: username}, function(err, count){
 		if(err) return response.json({error: err});
 		if(count>0) return next();
 
-		return response.json({error: 'El username especificado no existe'});
+		return response.json({error: '1000', msg: 'El username especificado no existe'});
 	});
 }
 
