@@ -97,7 +97,7 @@ function activate(request, response){
 				return response.json({status: 'ok'});
 			});
 			
-		}else return response.json({status: 'denied', error: 'Token incorrecto'});
+		}else return response.json({status: 'denied', error: '2001', msg: 'token invalido'});
 	});
 }
 
