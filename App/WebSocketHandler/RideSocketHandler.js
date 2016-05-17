@@ -26,10 +26,10 @@ function createRide(socket, data){
 		if(err) return socket.emit('err', {msg: err});
 
 		var user = rideObj.owner;
-		socket["email"] = user.email; //Agrega email al socket
+		socket["_id"] = user; //Agrega userID al socket
 		socket.join(rideObj._id); //Crea room, el nombre sera el 'id' del ride
 		activeUsers.push({
-			email: user.email,
+			_id: user,
 			socket: socket,
 			rideId: rideObj._id,
 			type: 'owner'
@@ -64,17 +64,17 @@ function deleteRide(socket, id){
 * @param Object ({email: 'String', rideId: 'String'})
 */
 function joinRide(socket, data){
-	RidesController.addJoinedUsers({email: data.email, rideId: data.rideId}, function(err){
+	RidesController.addJoinedUsers(data, function(err){
 		if(err) return socket.emit('err', {msg: err});
-		socket["email"] = data.email; //Agrega email al socket
-		socket.join(data.rideId); //Ingresa al room con el 'id' del ride
+		socket["_id"] = data.user; //Agrega userID al socket
+		socket.join(data.ride); //Ingresa al room con el 'id' del ride
 		activeUsers.push({
-			email: data.email,
+			_id: data.user,
 			socket: socket,
-			rideId: data.rideId,
+			rideId: data.ride,
 			type: 'user'
 		});
-
+		
 		sendRidesToClient();
 	});
 }
@@ -87,7 +87,6 @@ function joinRide(socket, data){
 function sendRidesToClient(){
 	RidesController.all(function(err, ridesObj){
 		if(err) return socket.emit('err', {msg: err});
-
 		localio.emit('updateClientRides', ridesObj);
 	});
 }

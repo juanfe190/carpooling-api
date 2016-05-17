@@ -23,7 +23,6 @@ function store(request, response){
 	data["activo"] = false;
 	data["password"] = bcrypt.hash(data['password']);
 	data["username"] = data["email"].split('@')[0];
-
 	var user = new usersModel(data);
 	user.save(function(err, userObj){
 		if(err) return response.json({error: err});

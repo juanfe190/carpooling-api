@@ -16,7 +16,6 @@ function startConnection(io){
 		socket.on('disconnect', function(){ onUserDisconnect(socket._id) });	
 	});
 }
-
 function onUserDisconnect(id){
 	activeUsers = activeUsers.filter(function(user, index){
 		return user._id != id;

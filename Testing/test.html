@@ -5,8 +5,13 @@
 	<script src="https://cdn.socket.io/socket.io-1.0.6.js"></script>
 	<script   src="https://code.jquery.com/jquery-2.2.3.min.js"   integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo="   crossorigin="anonymous"></script>
 	<script>
+<<<<<<< HEAD
+	  var socket = io('wss://carpool-ulacit.rhcloud.com:8443');
+	  
+=======
 	  var socket = io('http://localhost:3000');
 	  //wss://carpool-ulacit.rhcloud.com:8443
+>>>>>>> d54c6ee08936805331cc59fdcb0db32d0c2d2d5b
 
 	socket.emit('getRides');
 	function eliminar(){
