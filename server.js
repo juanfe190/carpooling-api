@@ -54,7 +54,7 @@ app.get('/', function(request, response){
 
 //LOGIN
 app.post('/login', 
-	UsersMiddlewares.checkIfEmailExists,
+	UsersMiddlewares.checkIfUsernameExists,
 	require('./App/Controllers/LoginController'));
 
 //USERS

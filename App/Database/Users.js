@@ -31,6 +31,10 @@ var usersSchema = new Schema({
       validate : [unique, 'El correo ingresado ya fue registrado'],
       required: true
     },
+    username: {
+      type: 'string', 
+      required: true
+    },
   	password: {type: 'string', required: true},
     vehicleid: 'string',
   	since: 'date',

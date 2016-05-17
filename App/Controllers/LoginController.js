@@ -12,16 +12,16 @@ module.exports = LoginController;
 * @param express Response
 */
 function LoginController(request, response){
-	var email = request.body.email.toLowerCase();
+	var username = request.body.username.toLowerCase();
 	var password = request.body.password;
 
-	checkUserAndPass(email, password, function(loginStatus, objUser){
+	checkUserAndPass(username, password, function(loginStatus, objUser){
 		if(loginStatus){
-			var token = jwt.sign({email: email}, constants.jwtPrivateKey);
+			var token = jwt.sign({username: username}, constants.jwtPrivateKey);
 			return response.json({status: 'ok', token: token, user: objUser});
 		}else {
-			if(objUser.token != '') return response.json({status: 'denied', error: 'Usuario no ha verificado su correo o inactivo'});
-			return response.json({status: 'denied', error: 'datos invalidos'});
+			if(objUser.token != '') return response.json({status: 'denied', error: '1002'});
+			return response.json({status: 'denied', error: '1001'});
 		}
 	});
 }
@@ -30,12 +30,12 @@ function LoginController(request, response){
 * Revisa que exista un usuario con el email y verifica
 * la contrasena
 *
-* @param String email
+* @param String username
 * @param String password
 * @param Function callback
 */
-function checkUserAndPass(email, password, callback){
-	usersModel.findOne({'email': email})
+function checkUserAndPass(username, password, callback){
+	usersModel.findOne({'username': username})
 	.populate('study')
 	.exec(function(err, objUser){
 		if(err) return console.log('Error en query: '+err);

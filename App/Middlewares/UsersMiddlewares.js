@@ -4,7 +4,7 @@ var Canton = require('../Util/Provincias/cantones');
 
 module.exports = {
 	checkIfExists,
-	checkIfEmailExists,
+	checkIfUsernameExists,
 	checkRequiredValues,
 	populateCity,
 	checkIfEmailIsValid
@@ -16,30 +16,30 @@ module.exports = {
 */
 function checkIfExists(request, response, next){
 	var id = request.params.id || request.body.id;
-	if(!id) return response.json({error: 'El id del usuario no fue encontrado en el request'});
+	if(!id) return response.json({error: '3000', msg: 'Falta el id de usuario en el request'});
 
 	var user = usersModel.findById(id, function(err, docs){
 		if(err) return response.json({error: err});
 		if(docs) return next();
 
-		return response.json({error: 'El usuario especificado no existe'});
+		return response.json({error: '1000'});
 	});
 }
 
 /**
-* Revisa que el usuario a tratar exista. Ademas cambia el email a lowercase
+* Revisa que el usuario a tratar exista.
 * @param String email (En body o en URL)
 */
-function checkIfEmailExists(request, response, next){
-	var email = request.params.email || request.body.email;
-	if(!email) return response.json({error: 'El email del usuario no fue encontrado en el request'});
-	email = email.toLowerCase();
+function checkIfUsernameExists(request, response, next){
+	var username = request.params.username || request.body.username;
+	if(!username) return response.json({error: 'El username no fue encontrado en el request'});
+	username = username.toLowerCase();
 
-	var user = usersModel.count({email: email}, function(err, count){
+	var user = usersModel.count({username: username}, function(err, count){
 		if(err) return response.json({error: err});
 		if(count>0) return next();
 
-		return response.json({error: 'El email especificado no existe'});
+		return response.json({error: 'El username especificado no existe'});
 	});
 }
 
