@@ -36,7 +36,7 @@ var usersSchema = new Schema({
       required: true
     },
   	password: {type: 'string', required: true},
-    vehicleid: 'string',
+    vehicleId: 'string',
   	since: 'date',
     token: 'string',
     activo: 'boolean'

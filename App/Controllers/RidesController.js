@@ -25,7 +25,6 @@ function all(callback){
 	.exec(function(err, ridesObj){
 		if(err) return callback(err, null);
 
-		
 		return callback(null, ridesObj);
 	});
 }

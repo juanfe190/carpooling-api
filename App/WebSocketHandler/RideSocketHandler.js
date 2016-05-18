@@ -87,6 +87,7 @@ function joinRide(socket, data){
 function sendRidesToClient(){
 	RidesController.all(function(err, ridesObj){
 		if(err) return socket.emit('err', {msg: err});
+
 		localio.emit('updateClientRides', ridesObj);
 	});
 }

@@ -2,18 +2,13 @@
 <html>
 <head>
 	<title>Prueba</title>
-	<script src="https://cdn.socket.io/socket.io-1.0.6.js"></script>
+	<script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
 	<script   src="https://code.jquery.com/jquery-2.2.3.min.js"   integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo="   crossorigin="anonymous"></script>
 	<script>
-<<<<<<< HEAD
-	  var socket = io('wss://carpool-ulacit.rhcloud.com:8443');
-	  
-=======
+	  //var socket = io('wss://carpool-ulacit.rhcloud.com:8443');
 	  var socket = io('http://localhost:3000');
-	  //wss://carpool-ulacit.rhcloud.com:8443
->>>>>>> d54c6ee08936805331cc59fdcb0db32d0c2d2d5b
 
-	socket.emit('getRides');
+	
 	function eliminar(){
 		socket.emit('deleteRide', document.getElementById('id').value);
 	}
@@ -26,15 +21,17 @@
 		socket.emit('createRide', {
 		    "from": {
 		        "province": 5,
-		        "canton": 1
+		        "canton": 1,
+		         "details": ''
 		    },
 		    "to": {
 		        "province": 1,
-		        "canton": 1
+		        "canton": 1,
+		        "details": ''
 		    },
 		    "departureTime": "6:00 pm",
 		    "seatsAvailable": 5,
-		    "owner": "570b3bc4d45066d4b31c89c8",
+		    "owner": "573a78c1103128fc1fcb7444",
 		    "date": new Date()
 		});
 	};
@@ -42,6 +39,7 @@
 	function printRides(data){
 		var div = document.getElementById("rides");
 		div.innerHTML="";
+		console.log(data);
 		data.forEach(function(element, key){
 			console.log(element);
 			div.innerHTML = "<li>Ride id: "+element._id+"</li>";
@@ -57,10 +55,20 @@
 		socket.emit('getRideById', id);
 	}
 
+	function getRides(){
+		socket.emit('getRides');
+	}
+
 	//**Listeners**//
 	socket.on('err', function(data){console.error(data)});
-	socket.on('updateClientRides', function(data){printRides(data)});
+	socket.on('updateClientRides', function(data){console.log(data)});
 	socket.on('rideById', function(data){console.log(data)});
+	socket.on('disconnect', function(reason) {
+		alert(reason);
+	});
+	socket.on('error', function(err){
+		console.log(err);
+	});
 
 	function sendJson(){
 		$.post('https://carpool-ulacit.rhcloud.com/usuario/registrar','', function(data, status){
@@ -76,6 +84,7 @@ ID RIDE: <input type="text" id="id"></input><br>
 ID USER: <input type="text" id="email">
 <button onclick="eliminar()">Eliminar</button>
 <button onclick="joinear()">Unirse</button>
+<button onclick="getRides()">Get all rides</button>
 <button onclick="findByOwner()">Find by owner</button><br><br>
 <div>
 	<ul id="rides"></ul>
