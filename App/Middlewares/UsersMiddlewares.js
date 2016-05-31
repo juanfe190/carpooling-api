@@ -107,6 +107,7 @@ function populateCity(request, response, next){
 
 /*
 * Revisa si el email pertenece a ULACIT utilizando validEmails.json como referencia
+* Ademas revisa si el email es unique
 *
 * @author Felix Vasquez
 */
@@ -116,7 +117,11 @@ function checkIfEmailIsValid(request, response, next){
 	var domain = email.split('@')[1];
 
 	if(validDomains.emails.indexOf(domain) < 0) return response.json({error: 'El email ingresado no es valido', status: 'denied'});
-	next();
+
+	usersModel.count({email: value}, function(err, count){
+	    if(count==0) return next();
+	    else return response.json({error: 2002, msg: 'El email ya fue registrado', status: 'denied'});
+	  });
 }
 /**
 * Busca los cantones de una provincia, similar al controller pero 
